@@ -9,7 +9,12 @@ if TYPE_CHECKING:
     from sqlalchemy.orm import Session
 
 app = fastapi.FastAPI()
-@app.post("/api/items/", response_model=schemas.Item)
+
+@app.on_event("startup")
+def on_startup():
+    services._add_tables()
+
+@app.post("/api/item/", response_model=schemas.Item)
 async def create_item(item: schemas.CreateItem, db_session: "Session" = fastapi.Depends(services.get_db)):
     return await services.create_item(item=item, db_session=db_session)
 
