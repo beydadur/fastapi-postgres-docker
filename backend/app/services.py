@@ -11,17 +11,17 @@ def _add_tables():
         return db.Base.metadata.create_all(bind=db.engine)
 
 def get_db():
-    db = db.SessionLocal()
+    db_session = db.SessionLocal()
     try:
-        yield db
+        yield db_session
     finally:
-        db.close()
+        db_session.close()
 
 async def create_item(item: schemas.CreateItem, db_session: "Session") -> schemas.Item:
     db_item = models.Item(**item.dict())
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
+    db_session.add(db_item)
+    db_session.commit()
+    db_session.refresh(db_item)
     return schemas.Item.from_orm(db_item)
 
 async def get_all_items(db_session: "Session", skip: int = 0, limit: int = 100) -> List[schemas.Item]:
@@ -37,8 +37,8 @@ async def get_item(db_session: "Session", item_id: int) -> schemas.Item | None:
 async def delete_item(db_session: "Session", item_id: int) -> schemas.Item | None:
     item = db_session.query(models.Item).filter(models.Item.id == item_id).first()
     if item:
-        db.delete(item)
-        db.commit()
+        db_session.delete(item)
+        db_session.commit()
         return schemas.Item.from_orm(item)
     return None
 
@@ -51,4 +51,3 @@ async def update_item(db_session: "Session", item_id: int, item: schemas.CreateI
         db_session.refresh(db_item)
         return schemas.Item.from_orm(db_item)
     return None
-
