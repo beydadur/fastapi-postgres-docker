@@ -1,6 +1,6 @@
 import pytest
 
-# Yeni bir item oluşturma testleri
+# create new item
 def test_create_item(client):
     response = client.post(
         "/api/items/",
@@ -14,7 +14,7 @@ def test_create_item(client):
     assert "id" in data
     assert "created_at" in data
 
-# Item'ları okuma testleri
+# read items list 
 def test_read_items(client):
     # Önce test için bir item oluşturalım
     client.post(
@@ -33,7 +33,7 @@ def test_read_items(client):
     assert data[0]["title"] == "Test Item 1"
     assert data[1]["title"] == "Test Item 2"
 
-# Tek bir item okuma testi
+# read item by id
 def test_read_item(client):
     response = client.post(
         "/api/items/",
@@ -52,7 +52,7 @@ def test_read_item_not_found(client):
     assert response.status_code == 404
     assert response.json() == {"detail": "Item not found"}
 
-# Item güncelleme testi
+# update item
 def test_update_item(client):
     response = client.post(
         "/api/items/",
@@ -80,7 +80,7 @@ def test_update_item_not_found(client):
     assert response.status_code == 404
     assert response.json() == {"detail": "Item not found"}
 
-# Item silme testi
+# delete item
 def test_delete_item(client):
     response = client.post(
         "/api/items/",
@@ -93,7 +93,7 @@ def test_delete_item(client):
     data = delete_response.json()
     assert data["id"] == item_id
 
-    # Silindiğini doğrula
+    # confirm deletion
     get_response = client.get(f"/api/items/{item_id}")
     assert get_response.status_code == 404
 
