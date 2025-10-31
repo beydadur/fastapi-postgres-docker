@@ -45,7 +45,7 @@ locals {
 # Dockerfile'ınızın bulunduğu dizinde 'docker build -t fastapi-app:latest ./backend' komutunu çalıştırabilirsiniz.
 resource "docker_container" "api_container" {
     image = "fastapi-app:latest"
-    name = "fastapi-api"
+    name  = "fastapi-api"
     ports {
         internal = 8000
         external = var.app_port
@@ -56,8 +56,12 @@ resource "docker_container" "api_container" {
         read_only      = false
     }
     env = ["DATABASE_URL=postgresql+psycopg://${var.postgres_user}:${var.postgres_password}@${docker_container.db_container.name}:5432/${var.postgres_db}"]
+
     networks_advanced {
         name = docker_network.fastapi_network.name
     }
+
+    command = ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
     depends_on = [docker_container.db_container]
 }

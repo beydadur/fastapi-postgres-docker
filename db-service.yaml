@@ -1,3 +1,4 @@
+# db-service.yaml (güncellenmiş hali)
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,9 +9,11 @@ metadata:
     io.kompose.service: db
   name: db
 spec:
+  type: NodePort  # Servis tipini NodePort olarak değiştirin
   ports:
-    - name: "5432"
-      port: 5432
-      targetPort: 5432
+    - name: "db-port"
+      port: 5432       # Pod içindeki port (değişmiyor)
+      targetPort: 5432 # Konteyner portu (değişmiyor)
+      # nodePort: 30432 # İsterseniz sabit bir port da atayabilirsiniz
   selector:
     io.kompose.service: db

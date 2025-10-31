@@ -19,7 +19,7 @@ variable "postgres_db" {
 variable "postgres_port" {
     type = number
     description = "Port for Postgres database"
-    default = 5432
+    default = 5433
 }
 
 variable "app_port" {
