@@ -1,6 +1,7 @@
 import fastapi as fastapi
 from typing import TYPE_CHECKING, List
 import sqlalchemy.orm as orm
+from fastapi.responses import HTMLResponse
 
 from . import models, schemas, services
 from . import db as database
@@ -13,6 +14,20 @@ app = fastapi.FastAPI()
 @app.on_event("startup")
 def on_startup():
     services._add_tables()
+    
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    return """
+    <html>
+        <head>
+            <title>Welcome to FastAPI Project</title>
+        </head>
+        <body>
+            <h1>Welcome to FastAPI Project</h1>
+            <p>API documentation can be found at <a href="/docs">/docs</a>.</p>
+        </body>
+    </html>
+    """
 
 @app.post("/api/items/", response_model=schemas.Item)
 async def create_item(item: schemas.CreateItem, db_session: "Session" = fastapi.Depends(services.get_db)):
