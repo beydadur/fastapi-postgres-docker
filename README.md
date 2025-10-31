@@ -37,23 +37,23 @@ This project is a REST API built using FastAPI, PostgreSQL, and Docker. The proj
 
 ## Kurulum | Installation
 
-1.  Projeyi klonlayın | Clone the project:
+1. Projeyi klonlayın | Clone the project:
 
-    ```bash
-    git clone [https://github.com/beydadur/fastapi-postgres-docker.git](https://github.com/beydadur/fastapi-postgres-docker.git)
-    cd fastapi-postgres-docker
-    ```
+```bash
+git clone https://github.com/beydadur/fastapi-postgres-docker.git
+cd fastapi-postgres-docker
+```
 
-2.  `.env` dosyasını oluşturun ve aşağıdaki değişkenleri kendi yapılandırmanıza göre düzenleyin | Create a `.env` file and edit the variables below according to your own configuration:
+2. `.env` dosyasını oluşturun ve aşağıdaki değişkenleri kendi yapılandırmanıza göre düzenleyin | Create a `.env` file and edit the variables below according to your own configuration:
 
-    ```env
-    POSTGRES_USER=admin
-    POSTGRES_PASSWORD=admin
-    POSTGRES_DB=fastapi_postgres_docker
-    POSTGRES_PORT=5432
-    APP_PORT=8000
-    APP_HOST=0.0.0.0
-    ```
+```env
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=admin
+POSTGRES_DB=fastapi_postgres_docker
+POSTGRES_PORT=5432
+APP_PORT=8000
+APP_HOST=0.0.0.0
+```
 
 ## Uygulamayı Çalıştırma | Running the Application
 
@@ -67,34 +67,40 @@ Aşağıdaki komutu çalıştırarak uygulamayı başlatabilirsiniz | You can st
 
 ```bash
 docker-compose up --build
-Terraform ile Çalıştırma | Running with Terraform
+```
+
+### Terraform ile Çalıştırma | Running with Terraform
+
 FastAPI uygulamanız için Docker imajını oluşturun | Create the Docker image for your FastAPI application:
 
-Bash
-
+```bash
 docker build -t fastapi-app:latest ./backend
+```
+
 Terraform'u başlatın | Initialize Terraform:
 
-Bash
-
+```bash
 terraform init
+```
+
 Terraform planını oluşturun | Create a Terraform plan:
 
-Bash
-
+```bash
 terraform plan
+```
+
 Terraform ile altyapıyı oluşturun | Create the infrastructure with Terraform:
 
-Bash
-
+```bash
 terraform apply
-API Endpoints
-POST /api/items/: Yeni bir item oluşturur. | Creates a new item.
+```
+## API Endpoints
+POST `/api/items/`: Yeni bir item oluşturur. | Creates a new item.
 
-GET /api/items/: Tüm item'ları listeler. | Lists all items.
+GET `/api/items/`: Tüm item'ları listeler. | Lists all items.
 
-GET /api/items/{item_id}: Belirtilen ID'ye sahip item'ı getirir. | Retrieves the item with the specified ID.
+GET `/api/items/{item_id}`: Belirtilen ID'ye sahip item'ı getirir. | Retrieves the item with the specified ID.
 
-DELETE /api/items/{item_id}: Belirtilen ID'ye sahip item'ı siler. | Deletes the item with the specified ID.
+DELETE `/api/items/{item_id}`: Belirtilen ID'ye sahip item'ı siler. | Deletes the item with the specified ID.
 
-PUT /api/items/{item_id}: Belirtilen ID'ye sahip item'ı günceller. | Updates the item with the specified ID.
+PUT `/api/items/{item_id}`: Belirtilen ID'ye sahip item'ı günceller. | Updates the item with the specified ID.
