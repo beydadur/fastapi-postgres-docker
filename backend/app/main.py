@@ -1,7 +1,9 @@
 import fastapi as fastapi
 from typing import TYPE_CHECKING, List
 import sqlalchemy.orm as orm
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse 
+import os 
+from pathlib import Path
 
 from . import models, schemas, services
 from . import db as database
@@ -9,25 +11,17 @@ from . import db as database
 if TYPE_CHECKING:
     from sqlalchemy.orm import Session
 
+BASE_DIR = Path(__file__).resolve().parent
+
 app = fastapi.FastAPI()
 
 @app.on_event("startup")
 def on_startup():
     services._add_tables()
-    
-@app.get("/", response_class=HTMLResponse)
+
+@app.get("/", response_class=FileResponse)
 async def read_root():
-    return """
-    <html>
-        <head>
-            <title>Welcome to FastAPI Project</title>
-        </head>
-        <body>
-            <h1>Welcome to FastAPI Project</h1>
-            <p>API documentation can be found at <a href="/docs">/docs</a>.</p>
-        </body>
-    </html>
-    """
+    return FileResponse(BASE_DIR / "index.html")
 
 @app.post("/api/items/", response_model=schemas.Item)
 async def create_item(item: schemas.CreateItem, db_session: "Session" = fastapi.Depends(services.get_db)):

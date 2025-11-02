@@ -27,9 +27,9 @@ spec:
         image: postgres:16-alpine
         command: ['sh', '-c', 'until pg_isready -h db -p 5432; do echo waiting for database; sleep 2; done;']
       containers:
-        - image: docker.io/library/fastapi-app:latest
+        - image: fastapi-app:latest
           name: api
-          imagePullPolicy: IfNotPresent      # <-- EKSİK OLAN VE HATAYI ÇÖZECEK SATIR
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               memory: "128Mi"

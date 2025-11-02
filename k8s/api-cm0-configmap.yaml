@@ -1,5 +1,57 @@
 apiVersion: v1
 data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="tr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Welcome to FastAPI Project</title>
+        <style>
+            body { 
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+                display: flex; 
+                justify-content: center; 
+                align-items: center; 
+                height: 100vh; 
+                margin: 0; 
+                background-color: #f4f7f6;
+            }
+            .container { 
+                text-align: center; 
+                padding: 40px; 
+                background-color: #ffffff; 
+                border-radius: 10px; 
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            }
+            h1 { 
+                color: #00796b; /* FastAPI yeşili */
+                margin-bottom: 20px;
+            }
+            p { 
+                font-size: 1.1em; 
+                color: #333;
+            }
+            a { 
+                color: #00796b; 
+                text-decoration: none; 
+                font-weight: bold; 
+                border-bottom: 2px solid #b2dfdb;
+                transition: all 0.3s ease;
+            }
+            a:hover {
+                background-color: #e0f2f1;
+                border-bottom-color: #00796b;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>FastAPI, Docker & Kubernetes Project</h1>
+            <p>API documentation can be found at <a href="/docs">/docs</a>.</p>
+        </div>
+    </body>
+    </html>
   db.py: |
     from sqlalchemy import create_engine
     from sqlalchemy.orm import sessionmaker, DeclarativeBase
@@ -17,6 +69,9 @@ data:
     import fastapi as fastapi
     from typing import TYPE_CHECKING, List
     import sqlalchemy.orm as orm
+    from fastapi.responses import FileResponse
+    import os
+    from pathlib import Path
 
     from . import models, schemas, services
     from . import db as database
@@ -24,11 +79,17 @@ data:
     if TYPE_CHECKING:
         from sqlalchemy.orm import Session
 
+    BASE_DIR = Path(__file__).resolve().parent
+
     app = fastapi.FastAPI()
 
     @app.on_event("startup")
     def on_startup():
         services._add_tables()
+
+    @app.get("/", response_class=FileResponse)
+    async def read_root():
+        return FileResponse(BASE_DIR / "index.html")
 
     @app.post("/api/items/", response_model=schemas.Item)
     async def create_item(item: schemas.CreateItem, db_session: "Session" = fastapi.Depends(services.get_db)):
