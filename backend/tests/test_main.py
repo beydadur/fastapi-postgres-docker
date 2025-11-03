@@ -16,7 +16,6 @@ def test_create_item(client):
 
 # read items list 
 def test_read_items(client):
-    # Önce test için bir item oluşturalım
     client.post(
         "/api/items/",
         json={"title": "Test Item 1", "description": "Desc 1", "price": 10},
