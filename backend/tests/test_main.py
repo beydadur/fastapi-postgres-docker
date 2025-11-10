@@ -1,10 +1,15 @@
 import pytest
 
 # create new item
+
+
 def test_create_item(client):
     response = client.post(
         "/api/items/",
-        json={"title": "Test Item", "description": "This is a test item", "price": 10.5},
+        json={
+            "title": "Test Item",
+            "description": "This is a test item",
+            "price": 10.5},
     )
     assert response.status_code == 200, response.text
     data = response.json()
@@ -14,7 +19,9 @@ def test_create_item(client):
     assert "id" in data
     assert "created_at" in data
 
-# read items list 
+# read items list
+
+
 def test_read_items(client):
     client.post(
         "/api/items/",
@@ -33,10 +40,15 @@ def test_read_items(client):
     assert data[1]["title"] == "Test Item 2"
 
 # read item by id
+
+
 def test_read_item(client):
     response = client.post(
         "/api/items/",
-        json={"title": "Single Item", "description": "Desc Single", "price": 99.9},
+        json={
+            "title": "Single Item",
+            "description": "Desc Single",
+            "price": 99.9},
     )
     item_id = response.json()["id"]
 
@@ -46,23 +58,32 @@ def test_read_item(client):
     assert data["title"] == "Single Item"
     assert data["id"] == item_id
 
+
 def test_read_item_not_found(client):
     response = client.get("/api/items/999")
     assert response.status_code == 404
     assert response.json() == {"detail": "Item not found"}
 
 # update item
+
+
 def test_update_item(client):
     response = client.post(
         "/api/items/",
-        json={"title": "Original Title", "description": "Original Desc", "price": 50},
+        json={
+            "title": "Original Title",
+            "description": "Original Desc",
+            "price": 50},
     )
     item_id = response.json()["id"]
     print(f"Created item with ID: {item_id}")
 
     update_response = client.put(
         f"/api/items/{item_id}",
-        json={"title": "Updated Title", "description": "Updated Desc", "price": 55.5},
+        json={
+            "title": "Updated Title",
+            "description": "Updated Desc",
+            "price": 55.5},
     )
     assert update_response.status_code == 200
     data = update_response.json()
@@ -71,19 +92,28 @@ def test_update_item(client):
     assert data["price"] == 55.5
     assert data["id"] == item_id
 
+
 def test_update_item_not_found(client):
     response = client.put(
         "/api/items/999",
-        json={"title": "Does not matter", "description": "Does not matter", "price": 0},
+        json={
+            "title": "Does not matter",
+            "description": "Does not matter",
+            "price": 0},
     )
     assert response.status_code == 404
     assert response.json() == {"detail": "Item not found"}
 
 # delete item
+
+
 def test_delete_item(client):
     response = client.post(
         "/api/items/",
-        json={"title": "To Be Deleted", "description": "Delete me", "price": 1},
+        json={
+            "title": "To Be Deleted",
+            "description": "Delete me",
+            "price": 1},
     )
     item_id = response.json()["id"]
 
@@ -95,6 +125,7 @@ def test_delete_item(client):
     # confirm deletion
     get_response = client.get(f"/api/items/{item_id}")
     assert get_response.status_code == 404
+
 
 def test_delete_item_not_found(client):
     response = client.delete("/api/items/999")
