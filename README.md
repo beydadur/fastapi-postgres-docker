@@ -1,5 +1,4 @@
 # FastAPI, PostgreSQL and Docker Project
-# Test
 
 Bu proje, FastAPI, PostgreSQL ve Docker kullanılarak oluşturulmuş bir REST API'sidir. Proje, Docker Compose ve Terraform olmak üzere iki farklı şekilde çalıştırılabilir.
 
